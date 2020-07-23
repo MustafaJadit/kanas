@@ -17,7 +17,7 @@ import com.kodyuzz.kanas.di.module.ViewHolderModule
 import com.kodyuzz.kanas.utils.display.Toaster
 import javax.inject.Inject
 
-abstract class BaseItemVIewHolder<T : Any, VM : BaseItemViewModel<T>>(
+abstract class BaseItemViewHolder<T : Any, VM : BaseItemViewModel<T>>(
     @LayoutRes layoutId: Int, parent: ViewGroup
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(layoutId, parent, false)),
     LifecycleOwner {

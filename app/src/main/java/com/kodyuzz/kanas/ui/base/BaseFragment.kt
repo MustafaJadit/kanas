@@ -18,27 +18,43 @@ import javax.inject.Inject
 abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
 
     @Inject
-    lateinit var viewMode: VM
+    lateinit var viewModel: VM
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         injectDependencies(buildFragmentComponent())
+        super.onCreate(savedInstanceState)
         setupObservers()
-        viewMode.onCreate()
+        viewModel.onCreate()
     }
 
-    open fun setupObservers() {
-        viewMode.messageString.observe(this, Observer {
+    private fun buildFragmentComponent() =
+        DaggerFragmentComponent
+            .builder()
+            .applicationComponent((context!!.applicationContext as InstagramApplication).applicationComponent)
+            .fragmentModule(FragmentModule(this))
+            .build()
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        inflater.inflate(provideLayoutId(), container, false)
+
+    protected open fun setupObservers() {
+        viewModel.messageString.observe(this, Observer {
             it.data?.run { showMessage(this) }
         })
 
-        viewMode.messageStringId.observe(this, Observer {
+        viewModel.messageStringId.observe(this, Observer {
             it.data?.run { showMessage(this) }
         })
     }
 
-    fun showMessage(s: String) {
-        context?.let { Toaster.show(it, s) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupView(view)
     }
+
+
+    fun showMessage(message: String) = context?.let { Toaster.show(it, message) }
 
     fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
 
@@ -46,30 +62,10 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
         if (activity is BaseActivity<*>) (activity as BaseActivity<*>).goBack()
     }
 
-    protected abstract fun injectDependencies(buildFragmentComponent: FragmentComponent)
-
-    private fun buildFragmentComponent(): FragmentComponent {
-        return DaggerFragmentComponent.builder()
-            .applicationComponent((context?.applicationContext as InstagramApplication).applicationComponent)
-            .fragmentModule(FragmentModule(this))
-            .build()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupVIew(view)
-    }
-
-    abstract fun setupVIew(view: View)
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(provideLayoutId(), container, false)
-    }
-
     @LayoutRes
     protected abstract fun provideLayoutId(): Int
+
+    protected abstract fun injectDependencies(fragmentComponent: FragmentComponent)
+
+    protected abstract fun setupView(view: View)
 }

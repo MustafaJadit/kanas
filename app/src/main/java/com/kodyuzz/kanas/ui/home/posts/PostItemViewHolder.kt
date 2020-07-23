@@ -8,12 +8,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.kodyuzz.kanas.R
 import com.kodyuzz.kanas.data.model.Post
 import com.kodyuzz.kanas.di.component.ViewHolderComponent
-import com.kodyuzz.kanas.ui.base.BaseItemVIewHolder
+import com.kodyuzz.kanas.ui.base.BaseItemViewHolder
 import com.kodyuzz.kanas.utils.common.GlideHelper
 import kotlinx.android.synthetic.main.item_view_post.view.*
 
 class PostItemViewHolder(parent:ViewGroup):
-BaseItemVIewHolder<Post,PostItemViewModel>(R.layout.item_view_post,parent){
+BaseItemViewHolder<Post,PostItemViewModel>(R.layout.item_view_post,parent){
 
 
     override fun setupVIew(itemView: View) {

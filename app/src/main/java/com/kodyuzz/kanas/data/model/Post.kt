@@ -31,10 +31,10 @@ data class Post(
 
     @Expose
     @SerializedName("createdAt")
-    val createAt: Date
+    val createdAt: Date
 ) {
-    data class User(
 
+    data class User(
         @Expose
         @SerializedName("id")
         val id: String,
@@ -47,5 +47,4 @@ data class Post(
         @SerializedName("profilePicUrl")
         val profilePicUrl: String?
     )
-
 }

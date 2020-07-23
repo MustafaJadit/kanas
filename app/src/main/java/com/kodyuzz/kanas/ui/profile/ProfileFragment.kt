@@ -6,28 +6,33 @@ import com.kodyuzz.kanas.R
 import com.kodyuzz.kanas.di.component.FragmentComponent
 import com.kodyuzz.kanas.ui.base.BaseFragment
 
-class ProfileFragment : BaseFragment<ProfileVIewModel>() {
-    override fun injectDependencies(buildFragmentComponent: FragmentComponent) {
-        buildFragmentComponent.inject(this)
-    }
+class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
-    override fun setupVIew(view: View) {
-     }
+    companion object {
 
-    override fun provideLayoutId(): Int {
-        return R.layout.fragment_profile
-    }
+        const val TAG = "ProfileFragment"
 
-    companion object{
-        const val TAG="ProfileFragment"
-
-        fun getInstance(): ProfileFragment{
-            val args=Bundle()
-            val fragment=ProfileFragment()
-            fragment.arguments=args
+        fun newInstance(): ProfileFragment {
+            val args = Bundle()
+            val fragment = ProfileFragment()
+            fragment.arguments = args
             return fragment
-
         }
+    }
+
+    override fun provideLayoutId(): Int = R.layout.fragment_profile
+
+    override fun injectDependencies(fragmentComponent: FragmentComponent) {
+        fragmentComponent.inject(this)
+    }
+
+    override fun setupObservers() {
+        super.setupObservers()
+
+    }
+
+    override fun setupView(view: View) {
+
     }
 
 }

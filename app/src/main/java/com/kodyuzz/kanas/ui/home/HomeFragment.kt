@@ -14,15 +14,16 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment<HomeViewModel>() {
+
     companion object {
 
-        const val TAG: String = "HomeFragment"
+        const val TAG = "HomeFragment"
 
         fun newInstance(): HomeFragment {
-            val arg = Bundle()
-            val frament = HomeFragment()
-            frament.arguments = arg
-            return frament
+            val args = Bundle()
+            val fragment = HomeFragment()
+            fragment.arguments = args
+            return fragment
         }
     }
 
@@ -35,28 +36,28 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
     @Inject
     lateinit var postsAdapter: PostAdapter
 
-    override fun provideLayoutId():Int= R.layout.fragment_home
+    override fun provideLayoutId(): Int = R.layout.fragment_home
 
-    override fun injectDependencies(buildFragmentComponent: FragmentComponent) {
-       buildFragmentComponent.inject(this)
+    override fun injectDependencies(fragmentComponent: FragmentComponent) {
+        fragmentComponent.inject(this)
     }
 
-    override fun setupObservers(){
+    override fun setupObservers() {
         super.setupObservers()
 
-        viewMode.loading.observe(this, Observer {
-            progressBar.visibility=if (it)View.VISIBLE else View.GONE
+        viewModel.loading.observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
         })
 
-        viewMode.posts.observe(this, Observer {
+        viewModel.posts.observe(this, Observer {
             it.data?.run { postsAdapter.appendData(this) }
         })
 
         mainSharedViewModel.newPost.observe(this, Observer {
-            it.getIfNotHandled()?.run { viewMode.onNewPost(this) }
+            it.getIfNotHandled()?.run { viewModel.onNewPost(this) }
         })
 
-        viewMode.refreshPosts.observe(this, Observer {
+        viewModel.refreshPosts.observe(this, Observer {
             it.data?.run {
                 postsAdapter.updateList(this)
                 rvPosts.scrollToPosition(0)
@@ -64,26 +65,22 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
         })
     }
 
-    override fun setupVIew(view: View) {
-       rvPosts.apply {
-           layoutManager=linearLayoutManager
-           adapter=postsAdapter
-           addOnScrollListener(object :RecyclerView.OnScrollListener(){
-               override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                   super.onScrolled(recyclerView, dx, dy)
-                   layoutManager?.run {
-                       if (this is LinearLayoutManager
-                           && itemCount >0
-                           && itemCount == findLastVisibleItemPosition()+1
-                       )
-                           viewMode.onLoadMore()
-
-                   }
-               }
-           })
-       }
+    override fun setupView(view: View) {
+        rvPosts.apply {
+            layoutManager = linearLayoutManager
+            adapter = postsAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    layoutManager?.run {
+                        if (this is LinearLayoutManager
+                            && itemCount > 0
+                            && itemCount == findLastVisibleItemPosition() + 1
+                        ) viewModel.onLoadMore()
+                    }
+                }
+            })
+        }
     }
-
-
 
 }

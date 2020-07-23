@@ -9,6 +9,7 @@ import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.net.ssl.HttpsURLConnection
 
+
 abstract class BaseViewModel(
     protected val schedulerProvider: SchedulerProvider,
     protected val compositeDisposable: CompositeDisposable,
@@ -16,8 +17,8 @@ abstract class BaseViewModel(
 ) : ViewModel() {
 
     override fun onCleared() {
-        super.onCleared()
         compositeDisposable.dispose()
+        super.onCleared()
     }
 
     val messageStringId: MutableLiveData<Resource<Int>> = MutableLiveData()
@@ -33,8 +34,7 @@ abstract class BaseViewModel(
 
     protected fun checkInternetConnection(): Boolean = networkHelper.isNetworkConnected()
 
-
-    protected fun handleNetworkError(err: Throwable) =
+    protected fun handleNetworkError(err: Throwable?) =
         err?.let {
             networkHelper.castToNetworkError(it).run {
                 when (status) {
@@ -53,10 +53,9 @@ abstract class BaseViewModel(
             }
         }
 
-    private fun forcedLogoutUser() {
-
+    protected open fun forcedLogoutUser() {
+        // do something
     }
 
     abstract fun onCreate()
-
 }

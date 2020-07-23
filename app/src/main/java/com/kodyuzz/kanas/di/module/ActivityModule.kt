@@ -22,6 +22,29 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     fun provideLinearLayoutManager(): LinearLayoutManager = LinearLayoutManager(activity)
 
     @Provides
+    fun provideSplashViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper,
+        userRepository: UserRepository
+    ): SplashViewModel = ViewModelProviders.of(
+        activity, ViewModelProviderFactory(SplashViewModel::class) {
+            SplashViewModel(schedulerProvider, compositeDisposable, networkHelper, userRepository)
+            //this lambda creates and return SplashViewModel
+        }).get(SplashViewModel::class.java)
+
+    @Provides
+    fun provideLoginViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper,
+        userRepository: UserRepository
+    ): LoginViewModel = ViewModelProviders.of(
+        activity, ViewModelProviderFactory(LoginViewModel::class) {
+            LoginViewModel(schedulerProvider, compositeDisposable, networkHelper, userRepository)
+        }).get(LoginViewModel::class.java)
+
+    @Provides
     fun provideMainViewModel(
         schedulerProvider: SchedulerProvider,
         compositeDisposable: CompositeDisposable,
@@ -29,47 +52,7 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     ): MainViewModel = ViewModelProviders.of(
         activity, ViewModelProviderFactory(MainViewModel::class) {
             MainViewModel(schedulerProvider, compositeDisposable, networkHelper)
-        }
-    ).get(MainViewModel::class.java)
-
-    @Provides
-    fun providesLoginViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
-        networkHelper: NetworkHelper,
-        userRepository: UserRepository
-    ): LoginViewModel = ViewModelProviders.of(
-        activity, ViewModelProviderFactory(
-            LoginViewModel::class
-        ) {
-            LoginViewModel(
-                schedulerProvider,
-                compositeDisposable,
-                networkHelper,
-                userRepository
-            )
-        }
-    ).get(LoginViewModel::class.java)
-
-
-    @Provides
-    fun provideSplashViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
-        networkHelper: NetworkHelper,
-        userRepository: UserRepository
-    ): SplashViewModel = ViewModelProviders.of(
-        activity, ViewModelProviderFactory(
-            SplashViewModel::class
-        ) {
-            SplashViewModel(
-                schedulerProvider,
-                compositeDisposable,
-                networkHelper,
-                userRepository
-            )
-        }
-    ).get(SplashViewModel::class.java)
+        }).get(MainViewModel::class.java)
 
     @Provides
     fun provideMainSharedViewModel(

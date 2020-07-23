@@ -10,7 +10,7 @@ import com.kodyuzz.kanas.ui.home.HomeViewModel
 import com.kodyuzz.kanas.ui.home.posts.PostAdapter
 import com.kodyuzz.kanas.ui.main.MainSharedViewModel
 import com.kodyuzz.kanas.ui.photo.PhotoViewModel
-import com.kodyuzz.kanas.ui.profile.ProfileVIewModel
+import com.kodyuzz.kanas.ui.profile.ProfileViewModel
 import com.kodyuzz.kanas.utils.ViewModelProviderFactory
 import com.kodyuzz.kanas.utils.network.NetworkHelper
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
@@ -22,7 +22,7 @@ import io.reactivex.processors.PublishProcessor
 import java.io.File
 
 @Module
-class FragmentModule(val fragment: BaseFragment<*>) {
+class FragmentModule(private val fragment: BaseFragment<*>) {
 
     @Provides
     fun provideLinearLayoutManager(): LinearLayoutManager = LinearLayoutManager(fragment.context)
@@ -30,16 +30,15 @@ class FragmentModule(val fragment: BaseFragment<*>) {
     @Provides
     fun providePostsAdapter() = PostAdapter(fragment.lifecycle, ArrayList())
 
-
     @Provides
     fun provideCamera() = Camera.Builder()
-        .resetToCorrectOrientation(true)
+        .resetToCorrectOrientation(true)// it will rotate the camera bitmap to the correct orientation from meta data
         .setTakePhotoRequestCode(1)
         .setDirectory("temp")
         .setName("camera_temp_img")
         .setImageFormat(Camera.IMAGE_JPEG)
         .setCompression(75)
-        .setImageHeight(500)
+        .setImageHeight(500)// it will try to achieve this height as close as possible maintaining the aspect ratio;
         .build(fragment)
 
     @Provides
@@ -50,49 +49,39 @@ class FragmentModule(val fragment: BaseFragment<*>) {
         userRepository: UserRepository,
         postRepository: PostRepository
     ): HomeViewModel = ViewModelProviders.of(
-        fragment, ViewModelProviderFactory(
-            HomeViewModel::class
-        ) {
+        fragment, ViewModelProviderFactory(HomeViewModel::class) {
             HomeViewModel(
                 schedulerProvider, compositeDisposable, networkHelper, userRepository,
                 postRepository, ArrayList(), PublishProcessor.create()
             )
-        }
-    ).get(HomeViewModel::class.java)
+        }).get(HomeViewModel::class.java)
+
+    @Provides
+    fun provideProfileViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper
+    ): ProfileViewModel = ViewModelProviders.of(
+        fragment, ViewModelProviderFactory(ProfileViewModel::class) {
+            ProfileViewModel(schedulerProvider, compositeDisposable, networkHelper)
+        }).get(ProfileViewModel::class.java)
 
     @Provides
     fun providePhotoViewModel(
         schedulerProvider: SchedulerProvider,
         compositeDisposable: CompositeDisposable,
-        networkHelper: NetworkHelper,
         userRepository: UserRepository,
         photoRepository: PhotoRepository,
         postRepository: PostRepository,
+        networkHelper: NetworkHelper,
         directory: File
     ): PhotoViewModel = ViewModelProviders.of(
-        fragment, ViewModelProviderFactory(
-            PhotoViewModel::class
-        ) {
+        fragment, ViewModelProviderFactory(PhotoViewModel::class) {
             PhotoViewModel(
-                schedulerProvider, compositeDisposable, userRepository, photoRepository,
-                postRepository, networkHelper, directory
+                schedulerProvider, compositeDisposable, userRepository,
+                photoRepository, postRepository, networkHelper, directory
             )
-        }
-    ).get(PhotoViewModel::class.java)
-
-
-    @Provides
-    fun provideProfileViewModel(
-        schedulerProvider: SchedulerProvider,
-        disposable: CompositeDisposable,
-        networkHelper: NetworkHelper
-    ): ProfileVIewModel = ViewModelProviders.of(
-        fragment, ViewModelProviderFactory(
-            ProfileVIewModel::class
-        ) {
-            ProfileVIewModel(schedulerProvider, disposable, networkHelper)
-        }
-    ).get(ProfileVIewModel::class.java)
+        }).get(PhotoViewModel::class.java)
 
     @Provides
     fun provideMainSharedViewModel(
@@ -100,8 +89,7 @@ class FragmentModule(val fragment: BaseFragment<*>) {
         compositeDisposable: CompositeDisposable,
         networkHelper: NetworkHelper
     ): MainSharedViewModel = ViewModelProviders.of(
-        fragment, ViewModelProviderFactory(MainSharedViewModel::class) {
+        fragment.activity!!, ViewModelProviderFactory(MainSharedViewModel::class) {
             MainSharedViewModel(schedulerProvider, compositeDisposable, networkHelper)
-        }
-    ).get(MainSharedViewModel::class.java)
+        }).get(MainSharedViewModel::class.java)
 }

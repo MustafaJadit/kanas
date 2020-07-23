@@ -36,7 +36,10 @@ class ApplicationModule(private val application: InstagramApplication) {
     @Singleton
     fun provideTempDirectory() = FileUtils.getDirectory(application, "temp")
 
-
+    /**
+     * Since this function do not have @Singleton then each time CompositeDisposable is injected
+     * then a new instance of CompositeDisposable will be provided
+     */
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
@@ -45,17 +48,20 @@ class ApplicationModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
-    fun provideSharePreferences(): SharedPreferences =
-        application.getSharedPreferences("kodyuzz-pref", Context.MODE_PRIVATE)
+    fun provideSharedPreferences(): SharedPreferences =
+        application.getSharedPreferences("bootcamp-instagram-project-prefs", Context.MODE_PRIVATE)
 
-
+    /**
+     * We need to write @Singleton on the provide method if we are create the instance inside this method
+     * to make it singleton. Even if we have written @Singleton on the instance's class
+     */
     @Provides
     @Singleton
     fun provideDatabaseService(): DatabaseService =
         Room.databaseBuilder(
-            application, DatabaseService::class.java, "kodyuzz-db"
+            application, DatabaseService::class.java,
+            "bootcamp-instagram-project-db"
         ).build()
-
 
     @Provides
     @Singleton
@@ -64,10 +70,10 @@ class ApplicationModule(private val application: InstagramApplication) {
             BuildConfig.API_KEY,
             BuildConfig.BASE_URL,
             application.cacheDir,
-            10 * 1024 * 1024
+            10 * 1024 * 1024 // 10MB
         )
 
     @Singleton
     @Provides
-    fun provideNetworkHelper(): NetworkHelper= NetworkHelperImp(application)
+    fun provideNetworkHelper(): NetworkHelper = NetworkHelperImp(application)
 }

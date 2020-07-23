@@ -11,7 +11,6 @@ import com.kodyuzz.kanas.ui.base.BaseFragment
 import com.kodyuzz.kanas.ui.main.MainSharedViewModel
 import com.kodyuzz.kanas.utils.common.Event
 import com.mindorks.paracamera.Camera
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.pb_loading
 import kotlinx.android.synthetic.main.fragment_photo.*
 import java.io.FileNotFoundException
@@ -42,7 +41,7 @@ class PhotoFragment : BaseFragment<PhotoViewModel>(){
         buildFragmentComponent.inject(this)
     }
 
-    override fun setupVIew(view: View) {
+    override fun setupView(view: View) {
        view_gallery.setOnClickListener{
            Intent(Intent.ACTION_PICK)
                .apply {
@@ -67,11 +66,11 @@ class PhotoFragment : BaseFragment<PhotoViewModel>(){
 
     override fun setupObservers() {
         super.setupObservers()
-        viewMode.loading.observe(this, Observer {
+        viewModel.loading.observe(this, Observer {
             pb_loading.visibility=if (it)View.VISIBLE else View.GONE
         })
 
-        viewMode.post.observe(this, Observer {
+        viewModel.post.observe(this, Observer {
             it.getIfNotHandled()?.run {
                 mainSharedViewModel.newPost.postValue(Event(this))
                 mainSharedViewModel.onHomeRedirect()
@@ -87,7 +86,7 @@ class PhotoFragment : BaseFragment<PhotoViewModel>(){
                     try{
                         intent?.data?.let {
                             activity?.contentResolver?.openInputStream(it)?.run {
-                                viewMode.onGalleryImageSelected(this)
+                                viewModel.onGalleryImageSelected(this)
                             }
                         }?:showMessage(R.string.try_again)
                     } catch (e:FileNotFoundException){
@@ -96,7 +95,7 @@ class PhotoFragment : BaseFragment<PhotoViewModel>(){
                     }
                 }
                 Camera.REQUEST_TAKE_PHOTO ->{
-                    viewMode.onCameraImageTaken { camera.cameraBitmapPath }
+                    viewModel.onCameraImageTaken { camera.cameraBitmapPath }
                 }
             }
         }

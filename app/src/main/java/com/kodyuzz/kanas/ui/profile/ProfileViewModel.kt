@@ -5,7 +5,7 @@ import com.kodyuzz.kanas.utils.network.NetworkHelper
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
-class ProfileVIewModel(
+class ProfileViewModel(
     schedulerProvider: SchedulerProvider,
     compositeDisposable: CompositeDisposable,
     networkHelper: NetworkHelper

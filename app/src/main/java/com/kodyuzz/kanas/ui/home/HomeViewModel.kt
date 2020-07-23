@@ -15,13 +15,13 @@ import io.reactivex.schedulers.Schedulers.io
 
 class HomeViewModel(
     schedulerProvider: SchedulerProvider,
-    disposable: CompositeDisposable,
+    compositeDisposable: CompositeDisposable,
     networkHelper: NetworkHelper,
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
     private val allPostList: ArrayList<Post>,
     private val paginator: PublishProcessor<Pair<String?, String?>>
-) : BaseViewModel(schedulerProvider, disposable, networkHelper) {
+) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val posts: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
@@ -30,57 +30,56 @@ class HomeViewModel(
     var firstId: String? = null
     var lastId: String? = null
 
-    private val user: User = userRepository.getCurrentUser()!!
+    private val user: User = userRepository.getCurrentUser()!! // should not be used without logged in user
 
     init {
         compositeDisposable.add(
             paginator
                 .onBackpressureDrop()
-                .doOnNext{
+                .doOnNext {
                     loading.postValue(true)
                 }
-                .concatMapSingle {
-                    pageIds->
+                .concatMapSingle { pageIds ->
                     return@concatMapSingle postRepository
-                        .fetchHomePostList(pageIds.first,pageIds.second,user)
+                        .fetchHomePostList(pageIds.first, pageIds.second, user)
                         .subscribeOn(schedulerProvider.io())
-                        .doOnError{
+                        .doOnError {
                             loading.postValue(false)
                             handleNetworkError(it)
                         }
-                }.subscribe(
+                }
+                .subscribe(
                     {
                         allPostList.addAll(it)
-                        firstId=allPostList.maxBy { post->post.createAt.time }?.id
-                        lastId=allPostList.minBy { post -> post.createAt.time }?.id
+
+                        firstId = allPostList.maxBy { post -> post.createdAt.time }?.id
+                        lastId = allPostList.minBy { post -> post.createdAt.time }?.id
 
                         loading.postValue(false)
                         posts.postValue(Resource.success(it))
-                    }   ,{
+                    },
+                    {
                         loading.postValue(false)
                         handleNetworkError(it)
                     }
                 )
-
         )
     }
-
 
     override fun onCreate() {
         loadMorePosts()
     }
 
     private fun loadMorePosts() {
-        if (checkInternetConnectionWithMessage()) paginator.onNext(Pair(firstId,lastId))
+        if (checkInternetConnectionWithMessage()) paginator.onNext(Pair(firstId, lastId))
     }
 
-    fun onLoadMore(){
-        if (loading.value !==null && loading.value==false) loadMorePosts()
+    fun onLoadMore() {
+        if (loading.value !== null && loading.value == false) loadMorePosts()
     }
 
-    fun onNewPost(post:Post){
-        allPostList.add(0,post)
+    fun onNewPost(post: Post) {
+        allPostList.add(0, post)
         refreshPosts.postValue(Resource.success(mutableListOf<Post>().apply { addAll(allPostList) }))
     }
-
 }

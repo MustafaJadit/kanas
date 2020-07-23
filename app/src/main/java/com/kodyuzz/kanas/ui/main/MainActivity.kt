@@ -64,11 +64,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
             it.getIfNotHandled()?.run { showProfile() }
         })
 
-        viewModel.photonavigation.observe(this, Observer {
+        viewModel.photoNavigation.observe(this, Observer {
             it.getIfNotHandled()?.run { showAddPhoto() }
         })
 
-        mainSharedViewModel.homeRedirction.observe(this, Observer {
+        mainSharedViewModel.homeRedirection.observe(this, Observer {
             it.getIfNotHandled()?.run { bottomNavigation.selectedItemId = R.id.itemHome }
         })
 
@@ -103,7 +103,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
         var fragment = supportFragmentManager.findFragmentByTag(ProfileFragment.TAG) as ProfileFragment?
 
         if (fragment == null) {
-            fragment = ProfileFragment.getInstance()
+            fragment = ProfileFragment.newInstance()
+
             fragmentTransaction.add(R.id.containerFragment, fragment, ProfileFragment.TAG)
         } else {
             fragmentTransaction.show(fragment)

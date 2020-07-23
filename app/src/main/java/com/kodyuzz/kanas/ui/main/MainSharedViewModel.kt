@@ -16,11 +16,11 @@ class MainSharedViewModel(
 
     override fun onCreate() {}
 
-    val homeRedirction = MutableLiveData<Event<Boolean>>()
+    val homeRedirection = MutableLiveData<Event<Boolean>>()
 
     val newPost: MutableLiveData<Event<Post>> = MutableLiveData()
 
     fun onHomeRedirect() {
-        homeRedirction.postValue(Event(true))
+        homeRedirection.postValue(Event(true))
     }
 }

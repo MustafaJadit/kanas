@@ -40,7 +40,7 @@ class PostItemViewModel @Inject constructor(
     )
 
     val name:LiveData<String> =Transformations.map(data){it.creator.name}
-    val postTime:LiveData<String> = Transformations.map(data){TImeUtils.getTimeAgo(it.createAt)}
+    val postTime:LiveData<String> = Transformations.map(data){TImeUtils.getTimeAgo(it.createdAt)}
     val likedCount:LiveData<Int> = Transformations.map(data){it.likedBy?.size?:0}
     val isLiked:LiveData<Boolean> = Transformations.map(data){
         it.likedBy?.find { postUser ->postUser.id==user.id }!==null

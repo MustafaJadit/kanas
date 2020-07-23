@@ -11,32 +11,25 @@ class MainViewModel(
     schedulerProvider: SchedulerProvider,
     compositeDisposable: CompositeDisposable,
     networkHelper: NetworkHelper
-) : BaseViewModel(
-    schedulerProvider, compositeDisposable, networkHelper
-) {
+) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
-    val profileNavigation=MutableLiveData<Event<Boolean>>()
-
-    val homeNavigation= MutableLiveData<Event<Boolean>>()
-
-    val photonavigation=MutableLiveData<Event<Boolean>>()
+    val profileNavigation = MutableLiveData<Event<Boolean>>()
+    val homeNavigation = MutableLiveData<Event<Boolean>>()
+    val photoNavigation = MutableLiveData<Event<Boolean>>()
 
     override fun onCreate() {
         homeNavigation.postValue(Event(true))
-     }
+    }
 
-    fun onProfileSelected(){
+    fun onProfileSelected() {
         profileNavigation.postValue(Event(true))
     }
 
-    fun onHomeSelected(){
+    fun onHomeSelected() {
         homeNavigation.postValue(Event(true))
     }
 
-    fun onPhotoSelected(){
-        photonavigation.postValue(Event(true))
+    fun onPhotoSelected() {
+        photoNavigation.postValue(Event(true))
     }
-
-
-
 }

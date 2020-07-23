@@ -6,7 +6,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<T : Any, VH : BaseItemVIewHolder<T, out BaseItemViewModel<T>>>(
+abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewModel<T>>>(
     parentLifeCycle: Lifecycle,
     private val datalist: ArrayList<T>
 ) : RecyclerView.Adapter<VH>() {
@@ -19,7 +19,7 @@ abstract class BaseAdapter<T : Any, VH : BaseItemVIewHolder<T, out BaseItemViewM
                 recyclerView?.run {
                     for (i in 0 until childCount) {
                         getChildAt(i)?.let {
-                            (getChildViewHolder(it) as BaseItemVIewHolder<*, *>)
+                            (getChildViewHolder(it) as BaseItemViewHolder<*, *>)
                                 .run {
                                     onDestroy()
                                     viewModel.onManualCleared()
@@ -34,7 +34,7 @@ abstract class BaseAdapter<T : Any, VH : BaseItemVIewHolder<T, out BaseItemViewM
                 recyclerView?.run {
                     for (i in 0 until childCount) {
                         getChildAt(i)?.let {
-                            (getChildViewHolder(it) as BaseItemVIewHolder<*, *>).onStop()
+                            (getChildViewHolder(it) as BaseItemViewHolder<*, *>).onStop()
                         }
                     }
                 }
@@ -51,7 +51,7 @@ abstract class BaseAdapter<T : Any, VH : BaseItemVIewHolder<T, out BaseItemViewM
                         if (first in 0..last)
                             for (i in first..last) {
                                 findViewHolderForAdapterPosition(i)?.let {
-                                    (it as BaseItemVIewHolder<*, *>).onstart()
+                                    (it as BaseItemViewHolder<*, *>).onstart()
                                 }
                             }
 
