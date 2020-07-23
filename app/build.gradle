@@ -22,7 +22,8 @@ android {
     buildTypes {
         debug{
             //value should be included within double colons
-            buildConfigField("String", "BASE_URL", "\"https://api.projects.bootcamp.mindorks.com/batch/green\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.projects.bootcamp.mindorks.com/batch/green/\"")
+
             buildConfigField("String", "API_KEY", "\"HBNA19QVVAPP\"")
 
         }
@@ -30,7 +31,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "BASE_URL", "\"https://api.projects.bootcamp.mindorks.com/batch/green\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.projects.bootcamp.mindorks.com/batch/green/\"")
             buildConfigField("String", "API_KEY", "\"HBNA19QVVAPP\"")
         }
     }
