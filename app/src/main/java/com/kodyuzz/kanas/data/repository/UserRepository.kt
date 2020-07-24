@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository @Inject constructor(
+open class UserRepository @Inject constructor(
     private val networkService: NetworkService,
     private val databaseService: DatabaseService,
     private val userPreferences: UserPreferences

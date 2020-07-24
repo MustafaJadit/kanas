@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewModel<T>>>(
-    parentLifeCycle: Lifecycle,
-    private val datalist: ArrayList<T>
+    parentLifecycle: Lifecycle,
+    private val dataList: ArrayList<T>
 ) : RecyclerView.Adapter<VH>() {
+
     private var recyclerView: RecyclerView? = null
 
     init {
-        parentLifeCycle.addObserver(object : LifecycleObserver {
+        parentLifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             fun onParentDestroy() {
                 recyclerView?.run {
@@ -44,27 +45,23 @@ abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewM
             fun onParentStart() {
                 recyclerView?.run {
                     if (layoutManager is LinearLayoutManager) {
-                        val first =
-                            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                        val last =
-                            (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                        val first = (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        val last = (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                         if (first in 0..last)
                             for (i in first..last) {
                                 findViewHolderForAdapterPosition(i)?.let {
-                                    (it as BaseItemViewHolder<*, *>).onstart()
+                                    (it as BaseItemViewHolder<*, *>).onStart()
                                 }
                             }
-
                     }
                 }
             }
         })
     }
 
-
     override fun onViewAttachedToWindow(holder: VH) {
         super.onViewAttachedToWindow(holder)
-        holder.onstart()
+        holder.onStart()
     }
 
     override fun onViewDetachedFromWindow(holder: VH) {
@@ -82,17 +79,15 @@ abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewM
         this.recyclerView = null
     }
 
-    override fun getItemCount(): Int {
-        return datalist.size
-    }
+    override fun getItemCount(): Int = dataList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(datalist[position])
+        holder.bind(dataList[position])
     }
 
-    fun appendData(datalist: List<T>) {
+    fun appendData(dataList: List<T>) {
         val oldCount = itemCount
-        this.datalist.addAll(datalist)
+        this.dataList.addAll(dataList)
         val currentCount = itemCount
         if (oldCount == 0 && currentCount > 0)
             notifyDataSetChanged()
@@ -100,11 +95,9 @@ abstract class BaseAdapter<T : Any, VH : BaseItemViewHolder<T, out BaseItemViewM
             notifyItemRangeChanged(oldCount - 1, currentCount - oldCount)
     }
 
-
     fun updateList(list: List<T>) {
-        datalist.clear()
-        datalist.addAll(list)
+        dataList.clear()
+        dataList.addAll(list)
         notifyDataSetChanged()
     }
-
 }

@@ -1,18 +1,16 @@
 package com.kodyuzz.kanas.di.module
 
-import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.room.Room
-import com.kodyuzz.kanas.BuildConfig
 import com.kodyuzz.kanas.InstagramApplication
 import com.kodyuzz.kanas.data.local.db.DatabaseService
+import com.kodyuzz.kanas.data.remote.FakeNetworkService
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.remote.Networking
 import com.kodyuzz.kanas.di.ApplicationContext
 import com.kodyuzz.kanas.utils.common.FileUtils
+import com.kodyuzz.kanas.utils.network.FakeNetworkHelperImpl
 import com.kodyuzz.kanas.utils.network.NetworkHelper
-import com.kodyuzz.kanas.utils.network.NetworkHelperImp
 import com.kodyuzz.kanas.utils.rx.RxSchedulerProvider
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import dagger.Module
@@ -21,11 +19,11 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule(private val application: InstagramApplication) {
+class ApplicationTestModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
-    fun provideApplication(): Application = application
+    fun provideApplication(): InstagramApplication = application
 
     @Provides
     @Singleton
@@ -36,10 +34,6 @@ class ApplicationModule(private val application: InstagramApplication) {
     @Singleton
     fun provideTempDirectory() = FileUtils.getDirectory(application, "temp")
 
-    /**
-     * Since this function do not have @Singleton then each time CompositeDisposable is injected
-     * then a new instance of CompositeDisposable will be provided
-     */
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
@@ -48,32 +42,21 @@ class ApplicationModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(): SharedPreferences =
-        application.getSharedPreferences("kodyuzz-prefs", Context.MODE_PRIVATE)
-
-    /**
-     * We need to write @Singleton on the provide method if we are create the instance inside this method
-     * to make it singleton. Even if we have written @Singleton on the instance's class
-     */
-    @Provides
-    @Singleton
     fun provideDatabaseService(): DatabaseService =
         Room.databaseBuilder(
             application, DatabaseService::class.java,
-            "bootcamp-instagram-project-db"
+            "kodyuzz-prefs"
         ).build()
 
     @Provides
     @Singleton
-    fun provideNetworkService(): NetworkService =
-        Networking.create(
-            BuildConfig.API_KEY,
-            BuildConfig.BASE_URL,
-            application.cacheDir,
-            10 * 1024 * 1024 // 10MB
-        )
+    fun provideNetworkService(): NetworkService {
+        Networking.API_KEY = "FAKE_API_KEY"
+        return FakeNetworkService()
+    }
+
 
     @Singleton
     @Provides
-    fun provideNetworkHelper(): NetworkHelper = NetworkHelperImp(application)
+    fun provideNetworkHelper(): NetworkHelper = FakeNetworkHelperImpl(application)
 }

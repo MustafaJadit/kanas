@@ -12,13 +12,8 @@ import com.kodyuzz.kanas.ui.base.BaseItemViewHolder
 import com.kodyuzz.kanas.utils.common.GlideHelper
 import kotlinx.android.synthetic.main.item_view_post.view.*
 
-class PostItemViewHolder(parent:ViewGroup):
-BaseItemViewHolder<Post,PostItemViewModel>(R.layout.item_view_post,parent){
-
-
-    override fun setupVIew(itemView: View) {
-        itemView.ivLike.setOnClickListener{viewModel.onclickClick()}
-    }
+class PostItemViewHolder(parent: ViewGroup) :
+    BaseItemViewHolder<Post, PostItemViewModel>(R.layout.item_view_post, parent) {
 
     override fun injectDependencies(viewHolderComponent: ViewHolderComponent) {
         viewHolderComponent.inject(this)
@@ -28,34 +23,38 @@ BaseItemViewHolder<Post,PostItemViewModel>(R.layout.item_view_post,parent){
         super.setupObservers()
 
         viewModel.name.observe(this, Observer {
-            itemView.tvName.text=it
+            itemView.tvName.text = it
         })
 
         viewModel.postTime.observe(this, Observer {
-            itemView.tvTime.text=it
+            itemView.tvTime.text = it
+        })
+
+        viewModel.likesCount.observe(this, Observer {
+            itemView.tvLikesCount.text = itemView.context.getString(R.string.post_like_label, it)
         })
 
         viewModel.isLiked.observe(this, Observer {
-            if (it)itemView.ivLike.setImageResource(R.drawable.ic_heart_selected)
+            if (it) itemView.ivLike.setImageResource(R.drawable.ic_heart_selected)
             else itemView.ivLike.setImageResource(R.drawable.ic_heart_unselected)
         })
 
         viewModel.profileImage.observe(this, Observer {
             it?.run {
-                val glideRequest= Glide
+                val glideRequest = Glide
                     .with(itemView.ivProfile.context)
-                    .load(GlideHelper.getProtectedUrl(url,headers))
+                    .load(GlideHelper.getProtectedUrl(url, headers))
                     .apply(RequestOptions.circleCropTransform())
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_profile_selected))
 
-                if (placeHolderWidth >0 && placeHolderHeight>0){
-                    val params= itemView.ivProfile.layoutParams as ViewGroup.LayoutParams
-                    params.width= placeHolderWidth
-                    params.height= placeHolderHeight
-                    itemView.ivProfile.layoutParams=params
-                    glideRequest.apply(RequestOptions.overrideOf(placeHolderWidth,placeHolderHeight))
+                if (placeholderWidth > 0 && placeholderHeight > 0) {
+                    val params = itemView.ivProfile.layoutParams as ViewGroup.LayoutParams
+                    params.width = placeholderWidth
+                    params.height = placeholderHeight
+                    itemView.ivProfile.layoutParams = params
+                    glideRequest
+                        .apply(RequestOptions.overrideOf(placeholderWidth, placeholderHeight))
                         .apply(RequestOptions.placeholderOf(R.drawable.ic_profile_unselected))
-
                 }
                 glideRequest.into(itemView.ivProfile)
             }
@@ -63,16 +62,17 @@ BaseItemViewHolder<Post,PostItemViewModel>(R.layout.item_view_post,parent){
 
         viewModel.imageDetail.observe(this, Observer {
             it?.run {
-                val glideRequest=Glide
+                val glideRequest = Glide
                     .with(itemView.ivPost.context)
-                    .load(GlideHelper.getProtectedUrl(url,headers))
+                    .load(GlideHelper.getProtectedUrl(url, headers))
 
-                if (placeHolderWidth >0 && placeHolderHeight >0){
-                    val params= itemView.ivPost.layoutParams as ViewGroup.LayoutParams
-                    params.width= placeHolderWidth
-                    params.height=placeHolderHeight
-                    itemView.ivPost.layoutParams=params
-                    glideRequest.apply(RequestOptions.overrideOf(placeHolderWidth,placeHolderHeight))
+                if (placeholderWidth > 0 && placeholderHeight > 0) {
+                    val params = itemView.ivPost.layoutParams as ViewGroup.LayoutParams
+                    params.width = placeholderWidth
+                    params.height = placeholderHeight
+                    itemView.ivPost.layoutParams = params
+                    glideRequest
+                        .apply(RequestOptions.overrideOf(placeholderWidth, placeholderHeight))
                         .apply(RequestOptions.placeholderOf(R.drawable.ic_photo))
                 }
                 glideRequest.into(itemView.ivPost)
@@ -80,4 +80,7 @@ BaseItemViewHolder<Post,PostItemViewModel>(R.layout.item_view_post,parent){
         })
     }
 
+    override fun setupView(view: View) {
+        itemView.ivLike.setOnClickListener { viewModel.onLikeClick() }
+    }
 }

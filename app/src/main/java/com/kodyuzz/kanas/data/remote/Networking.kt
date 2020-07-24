@@ -11,12 +11,13 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 object Networking {
+
     const val HEADER_API_KEY = "x-api-key"
     const val HEADER_ACCESS_TOKEN = "x-access-token"
     const val HEADER_USER_ID = "x-user-id"
 
     private const val NETWORK_CALL_TIMEOUT = 60
-    lateinit var API_KEY: String
+    internal lateinit var API_KEY: String
 
     fun create(apiKey: String, baseUrl: String, cacheDir: File, cacheSize: Long): NetworkService {
         API_KEY = apiKey
@@ -29,8 +30,7 @@ object Networking {
                         .apply {
                             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
                             else HttpLoggingInterceptor.Level.NONE
-                        }
-                    )
+                        })
                     .readTimeout(NETWORK_CALL_TIMEOUT.toLong(), TimeUnit.SECONDS)
                     .writeTimeout(NETWORK_CALL_TIMEOUT.toLong(), TimeUnit.SECONDS)
                     .build()

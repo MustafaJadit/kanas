@@ -30,10 +30,9 @@ abstract class BaseItemViewHolder<T : Any, VM : BaseItemViewModel<T>>(
     lateinit var viewModel: VM
 
     @Inject
-    lateinit var lifeCycleRegistry: LifecycleRegistry
+    lateinit var lifecycleRegistry: LifecycleRegistry
 
-    override fun getLifecycle(): Lifecycle = lifeCycleRegistry
-
+    override fun getLifecycle(): Lifecycle = lifecycleRegistry
 
     open fun bind(data: T) {
         viewModel.updateData(data)
@@ -41,58 +40,49 @@ abstract class BaseItemViewHolder<T : Any, VM : BaseItemViewModel<T>>(
 
     protected fun onCreate() {
         injectDependencies(buildViewHolderComponent())
-        lifeCycleRegistry.markState(Lifecycle.State.INITIALIZED)
-        lifeCycleRegistry.markState(Lifecycle.State.CREATED)
+        lifecycleRegistry.markState(Lifecycle.State.INITIALIZED)
+        lifecycleRegistry.markState(Lifecycle.State.CREATED)
         setupObservers()
-        setupVIew(itemView)
+        setupView(itemView)
     }
 
-    fun onstart() {
-        lifeCycleRegistry.markState(Lifecycle.State.STARTED)
-        lifeCycleRegistry.markState(Lifecycle.State.RESUMED)
+    fun onStart() {
+        lifecycleRegistry.markState(Lifecycle.State.STARTED)
+        lifecycleRegistry.markState(Lifecycle.State.RESUMED)
     }
 
     fun onStop() {
-        lifeCycleRegistry.markState(Lifecycle.State.STARTED)
-        lifeCycleRegistry.markState(Lifecycle.State.CREATED)
+        lifecycleRegistry.markState(Lifecycle.State.STARTED)
+        lifecycleRegistry.markState(Lifecycle.State.CREATED)
     }
 
     fun onDestroy() {
-        lifeCycleRegistry.markState(Lifecycle.State.DESTROYED)
-    }
-
-    abstract fun setupVIew(itemView: View)
-
-    protected open fun setupObservers() {
-        viewModel.messageString.observe(
-            this, Observer {
-                it.data?.run {
-                    showMessage(this)
-                }
-            }
-        )
-
-        viewModel.messageStringId.observe(
-            this, Observer {
-                it.data?.run {
-                    showMessage(this)
-                }
-            }
-        )
-    }
-
-    fun showMessage(@StringRes s: Int) = showMessage(itemView.context.getString(s))
-
-    fun showMessage(s: String) {
-        Toaster.show(itemView.context, s)
+        lifecycleRegistry.markState(Lifecycle.State.DESTROYED)
     }
 
     private fun buildViewHolderComponent() =
-        DaggerViewHolderComponent.builder()
+        DaggerViewHolderComponent
+            .builder()
             .applicationComponent((itemView.context.applicationContext as InstagramApplication).applicationComponent)
             .viewHolderModule(ViewHolderModule(this))
             .build()
 
+    fun showMessage(message: String) = Toaster.show(itemView.context, message)
+
+    fun showMessage(@StringRes resId: Int) = showMessage(itemView.context.getString(resId))
+
+    protected open fun setupObservers() {
+        viewModel.messageString.observe(this, Observer {
+            it.data?.run { showMessage(this) }
+        })
+
+        viewModel.messageStringId.observe(this, Observer {
+            it.data?.run { showMessage(this) }
+        })
+    }
+
     protected abstract fun injectDependencies(viewHolderComponent: ViewHolderComponent)
+
+    abstract fun setupView(view: View)
 
 }
