@@ -24,6 +24,8 @@ class TestComponentRule(private val context: Context) : TestRule {
 
     override fun apply(base: Statement, description: Description?): Statement {
         return object : Statement() {
+
+
             @Throws(Throwable::class)
             override fun evaluate() {
                 try {
@@ -35,5 +37,6 @@ class TestComponentRule(private val context: Context) : TestRule {
             }
         }
     }
+
 
 }

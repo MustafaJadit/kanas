@@ -6,7 +6,6 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 
-
 object RVMatcher {
 
     fun atPositionOnView(
@@ -15,16 +14,17 @@ object RVMatcher {
     ): Matcher<View> {
 
         return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
+            override fun matchesSafely(item: RecyclerView): Boolean {
+                val viewHolder = item.findViewHolderForAdapterPosition(position)
+                val targetView = viewHolder!!.itemView.findViewById<View>(targetViewId)
+                return itemMatcher.matches(targetView)
+
+            }
+
             override fun describeTo(description: Description) {
                 description.appendText("has view id $itemMatcher at position $position")
             }
 
-            public override fun matchesSafely(recyclerView: RecyclerView): Boolean {
-                val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
-                val targetView = viewHolder!!.itemView.findViewById<View>(targetViewId)
-                return itemMatcher.matches(targetView)
-            }
         }
     }
-
 }

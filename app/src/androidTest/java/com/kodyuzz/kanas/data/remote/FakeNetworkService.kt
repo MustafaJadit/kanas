@@ -11,9 +11,8 @@ import okhttp3.MultipartBody
 import java.util.*
 
 class FakeNetworkService : NetworkService {
-
     override fun doDummyCall(request: DummyRequest, apiKey: String): Single<DummyResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("Not yet implemented")
     }
 
     override fun doLoginCall(request: LoginRequest, apiKey: String): Single<LoginResponse> {
@@ -38,7 +37,6 @@ class FakeNetworkService : NetworkService {
         accessToken: String,
         apiKey: String
     ): Single<PostListResponse> {
-
         val creator1 = Post.User("userId1", "name1", "profilePicUrl1")
         val creator2 = Post.User("userId2", "name2", "profilePicUrl2")
 
@@ -53,6 +51,7 @@ class FakeNetworkService : NetworkService {
         val postListResponse = PostListResponse("statusCode", "success", listOf(post1, post2))
 
         return Single.just(postListResponse)
+
     }
 
     override fun doPostLikeCall(
@@ -61,7 +60,7 @@ class FakeNetworkService : NetworkService {
         accessToken: String,
         apiKey: String
     ): Single<GeneralResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("Not yet implemented")
     }
 
     override fun doPostUnlikeCall(
@@ -70,7 +69,7 @@ class FakeNetworkService : NetworkService {
         accessToken: String,
         apiKey: String
     ): Single<GeneralResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("Not yet implemented")
     }
 
     override fun doImageUpload(
@@ -79,7 +78,7 @@ class FakeNetworkService : NetworkService {
         accessToken: String,
         apiKey: String
     ): Single<ImageResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("Not yet implemented")
     }
 
     override fun doPostCreationCall(
@@ -88,7 +87,8 @@ class FakeNetworkService : NetworkService {
         accessToken: String,
         apiKey: String
     ): Single<PostCreationResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("Not yet implemented")
     }
+
 
 }

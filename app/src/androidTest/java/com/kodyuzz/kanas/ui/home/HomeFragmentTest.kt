@@ -44,4 +44,5 @@ class HomeFragmentTest {
             .check(matches(atPositionOnView(1, withText("name2"), R.id.tvName)))
     }
 
+
 }

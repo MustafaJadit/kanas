@@ -10,7 +10,6 @@ import com.kodyuzz.kanas.data.remote.FakeNetworkService
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.remote.Networking
 import com.kodyuzz.kanas.di.ApplicationContext
-import com.kodyuzz.kanas.di.TempDirectory
 import com.kodyuzz.kanas.utils.common.FileUtils
 import com.kodyuzz.kanas.utils.network.FakeNetworkHelperImpl
 import com.kodyuzz.kanas.utils.network.NetworkHelper
@@ -33,9 +32,9 @@ class ApplicationTestModule(private val application: InstagramApplication) {
     @ApplicationContext
     fun provideContext(): Context = application
 
+
     @Provides
     @Singleton
-//    @TempDirectory
     fun provideTempDirectory() = FileUtils.getDirectory(application, "temp")
 
     @Provides
@@ -49,10 +48,6 @@ class ApplicationTestModule(private val application: InstagramApplication) {
     fun provideSharedPreferences(): SharedPreferences =
         application.getSharedPreferences("bootcamp-instagram-project-prefs", Context.MODE_PRIVATE)
 
-    /**
-     * We need to write @Singleton on the provide method if we are create the instance inside this method
-     * to make it singleton. Even if we have written @Singleton on the instance's class
-     */
     @Provides
     @Singleton
     fun provideDatabaseService(): DatabaseService =

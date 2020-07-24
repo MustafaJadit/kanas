@@ -24,7 +24,6 @@ class LoginActivityTest {
 
     @Before
     fun setup() {
-
     }
 
     @Test
@@ -39,13 +38,14 @@ class LoginActivityTest {
     }
 
     @Test
-    fun givenValidEmailAndValidPwd_whenLogin_shouldOpenMainActivity() {
+    fun givenValidEmailANdValidPwd_whenLogin_shouldOpenMainActivity() {
         launch(LoginActivity::class.java)
 
         onView(withId(R.id.et_email)).perform(
             typeText("test@gmail.com"),
             closeSoftKeyboard()
         )
+
         onView(withId(R.id.et_password)).perform(
             typeText("password"),
             closeSoftKeyboard()
@@ -56,5 +56,4 @@ class LoginActivityTest {
         onView(withId(R.id.bottomNavigation))
             .check(matches(isDisplayed()))
     }
-
 }
