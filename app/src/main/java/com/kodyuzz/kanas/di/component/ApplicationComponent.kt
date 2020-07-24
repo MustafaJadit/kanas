@@ -3,29 +3,19 @@ package com.kodyuzz.kanas.di.component
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.kodyuzz.kanas.InstagramApplication
 import com.kodyuzz.kanas.data.local.db.DatabaseService
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.repository.UserRepository
 import com.kodyuzz.kanas.di.ApplicationContext
+import com.kodyuzz.kanas.di.TempDirectory
 import com.kodyuzz.kanas.di.module.ApplicationModule
-import com.kodyuzz.kanas.ui.base.BaseActivity
-import com.kodyuzz.kanas.ui.login.LoginViewModel
-import com.kodyuzz.kanas.ui.main.MainSharedViewModel
-import com.kodyuzz.kanas.ui.main.MainViewModel
-import com.kodyuzz.kanas.ui.splash.SplashViewModel
-import com.kodyuzz.kanas.utils.ViewModelProviderFactory
 import com.kodyuzz.kanas.utils.network.NetworkHelper
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import dagger.Component
-import dagger.Module
-import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import javax.inject.Singleton
-
 
 
 @Singleton
@@ -71,5 +61,6 @@ interface ApplicationComponent {
 
     fun getCompositeDisposable(): CompositeDisposable
 
-     fun getTempDirectory(): File
+    @TempDirectory
+    fun getTempDirectory(): File
 }

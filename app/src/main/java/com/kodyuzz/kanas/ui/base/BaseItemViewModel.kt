@@ -5,6 +5,7 @@ import com.kodyuzz.kanas.utils.network.NetworkHelper
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
+
 abstract class BaseItemViewModel<T : Any>(
     schedulerProvider: SchedulerProvider,
     compositeDisposable: CompositeDisposable,
@@ -18,5 +19,4 @@ abstract class BaseItemViewModel<T : Any>(
     fun updateData(data: T) {
         this.data.postValue(data)
     }
-
 }

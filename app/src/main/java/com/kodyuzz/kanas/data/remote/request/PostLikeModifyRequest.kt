@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 data class PostLikeModifyRequest(
     @Expose
     @SerializedName("postId")
-    val postId:String
+    var postId: String
 )

@@ -2,12 +2,16 @@ package com.kodyuzz.kanas.di.module
 
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kodyuzz.kanas.data.repository.DummyRepository
 import com.kodyuzz.kanas.data.repository.PhotoRepository
 import com.kodyuzz.kanas.data.repository.PostRepository
 import com.kodyuzz.kanas.data.repository.UserRepository
+import com.kodyuzz.kanas.di.TempDirectory
 import com.kodyuzz.kanas.ui.base.BaseFragment
+import com.kodyuzz.kanas.ui.dummies.DummiesAdapter
+import com.kodyuzz.kanas.ui.dummies.DummiesViewModel
 import com.kodyuzz.kanas.ui.home.HomeViewModel
-import com.kodyuzz.kanas.ui.home.posts.PostAdapter
+import com.kodyuzz.kanas.ui.home.posts.PostsAdapter
 import com.kodyuzz.kanas.ui.main.MainSharedViewModel
 import com.kodyuzz.kanas.ui.photo.PhotoViewModel
 import com.kodyuzz.kanas.ui.profile.ProfileViewModel
@@ -28,7 +32,23 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
     fun provideLinearLayoutManager(): LinearLayoutManager = LinearLayoutManager(fragment.context)
 
     @Provides
-    fun providePostsAdapter() = PostAdapter(fragment.lifecycle, ArrayList())
+    fun provideDummiesViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper,
+        dummyRepository: DummyRepository
+    ): DummiesViewModel =
+        ViewModelProviders.of(fragment,
+            ViewModelProviderFactory(DummiesViewModel::class) {
+                DummiesViewModel(schedulerProvider, compositeDisposable, networkHelper, dummyRepository)
+            }
+        ).get(DummiesViewModel::class.java)
+
+    @Provides
+    fun provideDummiesAdapter() = DummiesAdapter(fragment.lifecycle, ArrayList())
+
+    @Provides
+    fun providePostsAdapter() = PostsAdapter(fragment.lifecycle, ArrayList())
 
     @Provides
     fun provideCamera() = Camera.Builder()
@@ -74,12 +94,12 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
         photoRepository: PhotoRepository,
         postRepository: PostRepository,
         networkHelper: NetworkHelper,
-        directory: File
+        @TempDirectory directory: File
     ): PhotoViewModel = ViewModelProviders.of(
         fragment, ViewModelProviderFactory(PhotoViewModel::class) {
             PhotoViewModel(
                 schedulerProvider, compositeDisposable, userRepository,
-                photoRepository, postRepository, networkHelper, directory
+                        photoRepository, postRepository, networkHelper, directory
             )
         }).get(PhotoViewModel::class.java)
 

@@ -15,6 +15,10 @@ import com.kodyuzz.kanas.di.module.FragmentModule
 import com.kodyuzz.kanas.utils.display.Toaster
 import javax.inject.Inject
 
+/**
+ * Reference for generics: https://kotlinlang.org/docs/reference/generics.html
+ * Basically BaseFragment will take any class that extends BaseViewModel
+ */
 abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
 
     @Inject
@@ -30,7 +34,7 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     private fun buildFragmentComponent() =
         DaggerFragmentComponent
             .builder()
-            .applicationComponent((context!!.applicationContext as InstagramApplication).applicationComponent)
+            .applicationComponent((context?.applicationContext as InstagramApplication).applicationComponent)
             .fragmentModule(FragmentModule(this))
             .build()
 

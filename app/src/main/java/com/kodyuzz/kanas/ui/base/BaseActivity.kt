@@ -12,37 +12,39 @@ import com.kodyuzz.kanas.di.module.ActivityModule
 import com.kodyuzz.kanas.utils.display.Toaster
 import javax.inject.Inject
 
+/**
+ * Reference for generics: https://kotlinlang.org/docs/reference/generics.html
+ * Basically BaseActivity will take any class that extends BaseViewModel
+ */
 abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
-
 
     @Inject
     lateinit var viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         injectDependencies(buildActivityComponent())
+        super.onCreate(savedInstanceState)
         setContentView(provideLayoutId())
         setupObservers()
         setupView(savedInstanceState)
         viewModel.onCreate()
     }
 
-    private fun buildActivityComponent() = DaggerActivityComponent
-        .builder()
-        .applicationComponent((application as InstagramApplication).applicationComponent)
-        .activityModule(ActivityModule(this))
-        .build()
-
-
-    protected abstract fun injectDependencies(activityComponent: ActivityComponent)
+    private fun buildActivityComponent() =
+        DaggerActivityComponent
+            .builder()
+            .applicationComponent((application as InstagramApplication).applicationComponent)
+            .activityModule(ActivityModule(this))
+            .build()
 
     protected open fun setupObservers() {
-        viewModel.messageString.observe(
-            this,
-            Observer {
-                it.data?.run { showMessage(this) }
-            }
-        )
+        viewModel.messageString.observe(this, Observer {
+            it.data?.run { showMessage(this) }
+        })
+
+        viewModel.messageStringId.observe(this, Observer {
+            it.data?.run { showMessage(this) }
+        })
     }
 
     fun showMessage(message: String) = Toaster.show(applicationContext, message)
@@ -60,6 +62,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
     @LayoutRes
     protected abstract fun provideLayoutId(): Int
 
-    protected abstract fun setupView(savedInstanceState: Bundle?)
+    protected abstract fun injectDependencies(activityComponent: ActivityComponent)
 
+    protected abstract fun setupView(savedInstanceState: Bundle?)
 }

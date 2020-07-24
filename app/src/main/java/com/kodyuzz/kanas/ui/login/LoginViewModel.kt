@@ -17,12 +17,11 @@ class LoginViewModel(
     private val userRepository: UserRepository
 ) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
-    private val validationList: MutableLiveData<List<Validation>> = MutableLiveData()
+    private val validationsList: MutableLiveData<List<Validation>> = MutableLiveData()
 
     val launchMain: MutableLiveData<Event<Map<String, String>>> = MutableLiveData()
 
     val emailField: MutableLiveData<String> = MutableLiveData()
-
     val passwordField: MutableLiveData<String> = MutableLiveData()
     val loggingIn: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -30,16 +29,13 @@ class LoginViewModel(
     val passwordValidation: LiveData<Resource<Int>> = filterValidation(Validation.Field.PASSWORD)
 
     private fun filterValidation(field: Validation.Field) =
-        Transformations.map(validationList) {
+        Transformations.map(validationsList) {
             it.find { validation -> validation.field == field }
-                ?.run { return@run this.resouce }
+                ?.run { return@run this.resource }
                 ?: Resource.unknown()
-
         }
 
-    override fun onCreate() {
-
-    }
+    override fun onCreate() {}
 
     fun onEmailChange(email: String) = emailField.postValue(email)
 
@@ -49,13 +45,11 @@ class LoginViewModel(
         val email = emailField.value
         val password = passwordField.value
 
-        val validations = Validator.validateLoginField(email, password)
-        validationList.postValue(validations)
+        val validations = Validator.validateLoginFields(email, password)
+        validationsList.postValue(validations)
 
         if (validations.isNotEmpty() && email != null && password != null) {
-            val successValidation = validations.filter {
-                it.resouce.status == Status.SUCCESS
-            }
+            val successValidation = validations.filter { it.resource.status == Status.SUCCESS }
             if (successValidation.size == validations.size && checkInternetConnectionWithMessage()) {
                 loggingIn.postValue(true)
                 compositeDisposable.addAll(
@@ -76,5 +70,4 @@ class LoginViewModel(
             }
         }
     }
-
 }

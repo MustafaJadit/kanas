@@ -6,4 +6,5 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [ApplicationTestModule::class])
-interface TestComponent : ApplicationComponent {}
+interface TestComponent : ApplicationComponent {
+}

@@ -10,9 +10,10 @@ import com.kodyuzz.kanas.data.local.db.DatabaseService
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.remote.Networking
 import com.kodyuzz.kanas.di.ApplicationContext
+import com.kodyuzz.kanas.di.TempDirectory
 import com.kodyuzz.kanas.utils.common.FileUtils
 import com.kodyuzz.kanas.utils.network.NetworkHelper
-import com.kodyuzz.kanas.utils.network.NetworkHelperImp
+import com.kodyuzz.kanas.utils.network.NetworkHelperImpl
 import com.kodyuzz.kanas.utils.rx.RxSchedulerProvider
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import dagger.Module
@@ -34,6 +35,7 @@ class ApplicationModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
+    @TempDirectory
     fun provideTempDirectory() = FileUtils.getDirectory(application, "temp")
 
     /**
@@ -49,7 +51,7 @@ class ApplicationModule(private val application: InstagramApplication) {
     @Provides
     @Singleton
     fun provideSharedPreferences(): SharedPreferences =
-        application.getSharedPreferences("kodyuzz-prefs", Context.MODE_PRIVATE)
+        application.getSharedPreferences("bootcamp-instagram-project-prefs", Context.MODE_PRIVATE)
 
     /**
      * We need to write @Singleton on the provide method if we are create the instance inside this method
@@ -75,5 +77,5 @@ class ApplicationModule(private val application: InstagramApplication) {
 
     @Singleton
     @Provides
-    fun provideNetworkHelper(): NetworkHelper = NetworkHelperImp(application)
+    fun provideNetworkHelper(): NetworkHelper = NetworkHelperImpl(application)
 }

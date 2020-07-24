@@ -12,37 +12,35 @@ data class PostCreationResponse(
 
     @Expose
     @SerializedName("status")
-    val status:Int,
+    val status: Int,
 
     @Expose
     @SerializedName("message")
-    val message:String,
+    val message: String,
 
     @Expose
     @SerializedName("data")
-    val data:PostData
-
-){
+    val data: PostData
+) {
     data class PostData(
         @Expose
         @SerializedName("id")
-        val id:String,
+        val id: String,
 
         @Expose
         @SerializedName("imgUrl")
-        val imageUrl:String,
+        val imageUrl: String,
 
         @Expose
         @SerializedName("imgWidth")
-        val imageWidth:Int?,
+        val imageWidth: Int?,
 
         @Expose
         @SerializedName("imgHeight")
-        val imageHeight:Int?,
+        val imageHeight: Int?,
 
         @Expose
         @SerializedName("createdAt")
-        val createdAt:Date
-
+        val createdAt: Date
     )
 }

@@ -10,5 +10,5 @@ data class NetworkError(
     val statusCode: String = "-1",
     @Expose
     @SerializedName("message")
-    val message: String = "something went wrong"
+    val message: String = "Something went wrong"
 )

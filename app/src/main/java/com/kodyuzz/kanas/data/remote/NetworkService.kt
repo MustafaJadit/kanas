@@ -10,7 +10,6 @@ import okhttp3.MultipartBody
 import retrofit2.http.*
 import javax.inject.Singleton
 
-
 @Singleton
 interface NetworkService {
 

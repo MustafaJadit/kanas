@@ -6,7 +6,6 @@ import com.kodyuzz.kanas.ui.base.BaseItemViewHolder
 import dagger.Module
 import dagger.Provides
 
-
 @Module
 class ViewHolderModule(private val viewHolder: BaseItemViewHolder<*, *>) {
 

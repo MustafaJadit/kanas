@@ -11,9 +11,10 @@ import javax.inject.Singleton
     entities = [
         DummyEntity::class
     ],
-    version = 1,
-    exportSchema = true
+    exportSchema = false,
+    version = 1
 )
-abstract class DatabaseService:RoomDatabase(){
+abstract class DatabaseService : RoomDatabase() {
+
     abstract fun dummyDao(): DummyDao
 }

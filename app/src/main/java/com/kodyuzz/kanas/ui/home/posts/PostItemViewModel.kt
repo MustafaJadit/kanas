@@ -3,14 +3,14 @@ package com.kodyuzz.kanas.ui.home.posts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.kodyuzz.kanas.R
+import com.kodyuzz.kanas.data.model.Image
 import com.kodyuzz.kanas.data.model.Post
 import com.kodyuzz.kanas.data.remote.Networking
 import com.kodyuzz.kanas.data.repository.PostRepository
 import com.kodyuzz.kanas.data.repository.UserRepository
 import com.kodyuzz.kanas.ui.base.BaseItemViewModel
-import com.kodyuzz.kanas.data.model.Image
 import com.kodyuzz.kanas.utils.common.Resource
-import com.kodyuzz.kanas.utils.common.TImeUtils
+import com.kodyuzz.kanas.utils.common.TimeUtils
 import com.kodyuzz.kanas.utils.display.ScreenUtils
 import com.kodyuzz.kanas.utils.log.Logger
 import com.kodyuzz.kanas.utils.network.NetworkHelper
@@ -40,19 +40,14 @@ class PostItemViewModel @Inject constructor(
     )
 
     val name: LiveData<String> = Transformations.map(data) { it.creator.name }
-    val postTime: LiveData<String> = Transformations.map(data) { TImeUtils.getTimeAgo(it.createdAt) }
+    val postTime: LiveData<String> = Transformations.map(data) { TimeUtils.getTimeAgo(it.createdAt) }
     val likesCount: LiveData<Int> = Transformations.map(data) { it.likedBy?.size ?: 0 }
     val isLiked: LiveData<Boolean> = Transformations.map(data) {
         it.likedBy?.find { postUser -> postUser.id == user.id } !== null
     }
 
     val profileImage: LiveData<Image> = Transformations.map(data) {
-        it.creator.profilePicUrl?.run {
-            Image(
-                this,
-                headers
-            )
-        }
+        it.creator.profilePicUrl?.run { Image(this, headers) }
     }
 
     val imageDetail: LiveData<Image> = Transformations.map(data) {

@@ -7,7 +7,6 @@ import com.kodyuzz.kanas.R
 import com.kodyuzz.kanas.di.component.ActivityComponent
 import com.kodyuzz.kanas.ui.base.BaseActivity
 import com.kodyuzz.kanas.ui.home.HomeFragment
-import com.kodyuzz.kanas.ui.main.MainActivity.Companion.TAG
 import com.kodyuzz.kanas.ui.photo.PhotoFragment
 import com.kodyuzz.kanas.ui.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -104,7 +103,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
         if (fragment == null) {
             fragment = ProfileFragment.newInstance()
-
             fragmentTransaction.add(R.id.containerFragment, fragment, ProfileFragment.TAG)
         } else {
             fragmentTransaction.show(fragment)

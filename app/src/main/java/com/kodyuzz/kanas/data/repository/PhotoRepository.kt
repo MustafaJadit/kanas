@@ -19,5 +19,4 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
                 .map { it.data.imageUrl }
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.kodyuzz.kanas.data.repository
 
-import com.kodyuzz.kanas.Demo1
 import com.kodyuzz.kanas.data.model.User
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.remote.Networking
@@ -10,7 +9,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -32,7 +32,7 @@ class PostRepositoryTest {
 
         val user = User("userId", "userName", "userEmail", "accessToken", "profilePicUrl")
 
-        Mockito.doReturn(Single.just(PostListResponse("statusCode", "message", listOf())))
+        doReturn(Single.just(PostListResponse("statusCode", "message", listOf())))
             .`when`(networkService)
             .doHomePostListCall(
                 "firstPostId",
@@ -44,7 +44,7 @@ class PostRepositoryTest {
 
         postRepository.fetchHomePostList("firstPostId", "lastPostId", user)
 
-        Mockito.verify(networkService).doHomePostListCall(
+        verify(networkService).doHomePostListCall(
             "firstPostId",
             "lastPostId",
             user.id,

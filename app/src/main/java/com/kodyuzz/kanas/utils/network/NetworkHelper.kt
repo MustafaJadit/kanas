@@ -1,7 +1,9 @@
 package com.kodyuzz.kanas.utils.network
 
-interface NetworkHelper{
-    fun isNetworkConnected():Boolean
+interface NetworkHelper {
 
-    fun castToNetworkError(throwable: Throwable):NetworkError
+    fun isNetworkConnected(): Boolean
+
+    fun castToNetworkError(throwable: Throwable): NetworkError
+
 }

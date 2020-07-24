@@ -9,7 +9,6 @@ import com.kodyuzz.kanas.ui.base.BaseActivity
 import com.kodyuzz.kanas.ui.login.LoginActivity
 import com.kodyuzz.kanas.ui.main.MainActivity
 import com.kodyuzz.kanas.utils.common.Event
-import java.util.*
 
 class SplashActivity : BaseActivity<SplashViewModel>() {
 
@@ -17,20 +16,19 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
         const val TAG = "SplashActivity"
     }
 
+    override fun provideLayoutId(): Int = R.layout.activity_splash
+
     override fun injectDependencies(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
-    }
-
-    override fun provideLayoutId(): Int {
-        return R.layout.activity_splash
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
     }
 
-
     override fun setupObservers() {
         super.setupObservers()
+        // Event is used by the view model to tell the activity to launch another activity
+        // view model also provided the Bundle in the event that is needed for the Activity
         viewModel.launchLogin.observe(this, Observer<Event<Map<String, String>>> {
             it.getIfNotHandled()?.run {
                 startActivity(Intent(applicationContext, LoginActivity::class.java))

@@ -6,13 +6,14 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.hasSize
 import org.junit.Test
 
+
 class ValidatorTest {
 
     @Test
-    fun givenValidEmailAndPwd_whenValidate_ShouldReturnSuccess() {
-        val email = "mustafajadit@gmail.com"
-        val password = "12345678"
-        val validations = Validator.validateLoginField(email, password)
+    fun givenValidEmailAndValidPwd_whenValidate_shouldReturnSuccess() {
+        val email = "test@gmail.com"
+        val password = "password"
+        val validations = Validator.validateLoginFields(email, password)
         assertThat(validations, hasSize(2))
         assertThat(
             validations,
@@ -23,15 +24,14 @@ class ValidatorTest {
         )
     }
 
-
     @Test
-    fun givenInvalidEmailAndValidPwd_WhenValidate_shouldReturnEmailError() {
-        val email = "mustafajadit.com"
-        val password = "12345678"
-        val validation = Validator.validateLoginField(email, password)
-        assertThat(validation, hasSize(2))
+    fun givenInvalidEmailAndValidPwd_whenValidate_shouldReturnEmailError() {
+        val email = "test.com"
+        val password = "password"
+        val validations = Validator.validateLoginFields(email, password)
+        assertThat(validations, hasSize(2))
         assertThat(
-            validation,
+            validations,
             contains(
                 Validation(Validation.Field.EMAIL, Resource.error(R.string.email_field_invalid)),
                 Validation(Validation.Field.PASSWORD, Resource.success())
@@ -40,17 +40,18 @@ class ValidatorTest {
     }
 
     @Test
-    fun givenValidEmailAndInvalidPwd_WhenValidate_shouldReturnPasswordError() {
-        val email = "mustafajadit@gmail.com"
-        val password = "pdf"
-        val validation = Validator.validateLoginField(email, password)
-        assertThat(validation, hasSize(2))
+    fun givenValidEmailAndInvalidPwd_whenValidate_shouldReturnPasswordError() {
+        val email = "test@gmail.com"
+        val password = "pwd"
+        val validations = Validator.validateLoginFields(email, password)
+        assertThat(validations, hasSize(2))
         assertThat(
-            validation,
+            validations,
             contains(
                 Validation(Validation.Field.EMAIL, Resource.success()),
                 Validation(Validation.Field.PASSWORD, Resource.error(R.string.password_field_small_length))
             )
         )
     }
+
 }

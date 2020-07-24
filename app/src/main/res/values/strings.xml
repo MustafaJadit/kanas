@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kanas</string>
+    <string name="app_name">Instagram Project</string>
 
     <string name="network_connection_error">Internet connection lost, please retry again</string>
     <string name="network_default_error">Something wrong happened, please retry again</string>

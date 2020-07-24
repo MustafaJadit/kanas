@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName
 data class PostCreationRequest(
     @Expose
     @SerializedName("imgUrl")
-    var imageUrl:String,
+    var imgUrl: String,
 
     @Expose
     @SerializedName("imgWidth")
-    var imgWidth:Int,
+    var imgWidth: Int,
 
     @Expose
     @SerializedName("imgHeight")
-    var imgHeight:Int
+    var imgHeight: Int
 )

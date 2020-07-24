@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 data class GeneralResponse(
     @Expose
     @SerializedName("statusCode")
-    var statusCode:String,
+    var statusCode: String,
 
     @Expose
     @SerializedName("message")
-    var message:String
+    var message: String
 )

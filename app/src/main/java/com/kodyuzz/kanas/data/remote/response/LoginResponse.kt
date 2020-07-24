@@ -35,4 +35,5 @@ data class LoginResponse(
     @Expose
     @SerializedName("profilePicUrl")
     var profilePicUrl: String?
+
 )

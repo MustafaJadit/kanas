@@ -1,7 +1,7 @@
 package com.kodyuzz.kanas.data.repository
 
 import com.kodyuzz.kanas.data.local.db.DatabaseService
-import com.kodyuzz.kanas.data.local.pref.UserPreferences
+import com.kodyuzz.kanas.data.local.prefs.UserPreferences
 import com.kodyuzz.kanas.data.model.User
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.remote.request.LoginRequest
@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-open class UserRepository @Inject constructor(
+class UserRepository @Inject constructor(
     private val networkService: NetworkService,
     private val databaseService: DatabaseService,
     private val userPreferences: UserPreferences
@@ -24,33 +24,34 @@ open class UserRepository @Inject constructor(
     }
 
     fun removeCurrentUser() {
+        userPreferences.removeUserId()
+        userPreferences.removeUserName()
         userPreferences.removeUserEmail()
         userPreferences.removeAccessToken()
-        userPreferences.removeUserName()
-        userPreferences.removeUserId()
     }
 
     fun getCurrentUser(): User? {
+
         val userId = userPreferences.getUserId()
         val userName = userPreferences.getUserName()
         val userEmail = userPreferences.getUserEmail()
-        val userAccessToken = userPreferences.getAccessToken()
+        val accessToken = userPreferences.getAccessToken()
 
-        return if (userId != null && userName != null && userEmail != null && userAccessToken != null)
-            User(userId, userName, userEmail, userAccessToken)
-        else null
+        return if (userId !== null && userName != null && userEmail != null && accessToken != null)
+            User(userId, userName, userEmail, accessToken)
+        else
+            null
     }
 
     fun doUserLogin(email: String, password: String): Single<User> =
-        networkService.doLoginCall(
-            LoginRequest(email, password)
-        ).map {
-            User(
-                it.userId,
-                it.userName,
-                it.userEmail,
-                it.accessToken,
-                it.profilePicUrl
-            )
-        }
+        networkService.doLoginCall(LoginRequest(email, password))
+            .map {
+                User(
+                    it.userId,
+                    it.userName,
+                    it.userEmail,
+                    it.accessToken,
+                    it.profilePicUrl
+                )
+            }
 }

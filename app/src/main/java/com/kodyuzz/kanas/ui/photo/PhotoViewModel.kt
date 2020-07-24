@@ -29,13 +29,12 @@ class PhotoViewModel(
     private val directory: File
 ) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
-    private val user: User = userRepository.getCurrentUser()!!
+    private val user: User = userRepository.getCurrentUser()!! // should not be used without logged in user
 
-    val loading:MutableLiveData<Boolean> = MutableLiveData()
-    val post:MutableLiveData<Event<Post>> = MutableLiveData()
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
+    val post: MutableLiveData<Event<Post>> = MutableLiveData()
 
     override fun onCreate() {}
-
 
     fun onGalleryImageSelected(inputStream: InputStream) {
         loading.postValue(true)
@@ -108,5 +107,4 @@ class PhotoViewModel(
 
         )
     }
-
 }

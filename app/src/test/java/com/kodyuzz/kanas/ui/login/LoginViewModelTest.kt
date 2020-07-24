@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.kodyuzz.kanas.R
 import com.kodyuzz.kanas.data.model.User
-import com.kodyuzz.kanas.data.remote.Networking
 import com.kodyuzz.kanas.data.repository.UserRepository
 import com.kodyuzz.kanas.utils.common.Event
 import com.kodyuzz.kanas.utils.common.Resource
@@ -25,7 +24,6 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class LoginViewModelTest {
-
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -67,8 +65,8 @@ class LoginViewModelTest {
 
     @Test
     fun givenServerResponse200_whenLogin_shouldLaunchMainActivity() {
-        val email = "mustafajadit@gmail.com"
-        val password = "12345678"
+        val email = "test@gmail.com"
+        val password = "password"
         val user = User("id", "test", email, "accessToken")
         loginViewModel.emailField.value = email
         loginViewModel.passwordField.value = password

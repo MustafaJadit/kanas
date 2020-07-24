@@ -1,4 +1,4 @@
-package com.kodyuzz.kanas.data.local.pref
+package com.kodyuzz.kanas.data.local.prefs
 
 import android.content.SharedPreferences
 import javax.inject.Inject
@@ -17,8 +17,8 @@ class UserPreferences @Inject constructor(private val prefs: SharedPreferences) 
     fun getUserId(): String? =
         prefs.getString(KEY_USER_ID, null)
 
-    fun setUserId(userID: String) =
-        prefs.edit().putString(KEY_USER_ID, userID).apply()
+    fun setUserId(userId: String) =
+        prefs.edit().putString(KEY_USER_ID, userId).apply()
 
     fun removeUserId() =
         prefs.edit().remove(KEY_USER_ID).apply()
@@ -38,11 +38,10 @@ class UserPreferences @Inject constructor(private val prefs: SharedPreferences) 
     fun setUserEmail(email: String) =
         prefs.edit().putString(KEY_USER_EMAIL, email).apply()
 
-
     fun removeUserEmail() =
         prefs.edit().remove(KEY_USER_EMAIL).apply()
 
-    fun getAccessToken() =
+    fun getAccessToken(): String? =
         prefs.getString(KEY_ACCESS_TOKEN, null)
 
     fun setAccessToken(token: String) =

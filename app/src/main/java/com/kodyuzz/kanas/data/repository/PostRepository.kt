@@ -8,7 +8,6 @@ import com.kodyuzz.kanas.data.remote.request.PostLikeModifyRequest
 import io.reactivex.Single
 import javax.inject.Inject
 
-
 class PostRepository @Inject constructor(
     private val networkService: NetworkService
 ) {

@@ -1,6 +1,8 @@
 package com.kodyuzz.kanas.di.module
 
+import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.kodyuzz.kanas.InstagramApplication
 import com.kodyuzz.kanas.data.local.db.DatabaseService
@@ -8,6 +10,7 @@ import com.kodyuzz.kanas.data.remote.FakeNetworkService
 import com.kodyuzz.kanas.data.remote.NetworkService
 import com.kodyuzz.kanas.data.remote.Networking
 import com.kodyuzz.kanas.di.ApplicationContext
+import com.kodyuzz.kanas.di.TempDirectory
 import com.kodyuzz.kanas.utils.common.FileUtils
 import com.kodyuzz.kanas.utils.network.FakeNetworkHelperImpl
 import com.kodyuzz.kanas.utils.network.NetworkHelper
@@ -23,7 +26,7 @@ class ApplicationTestModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
-    fun provideApplication(): InstagramApplication = application
+    fun provideApplication(): Application = application
 
     @Provides
     @Singleton
@@ -32,6 +35,7 @@ class ApplicationTestModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
+//    @TempDirectory
     fun provideTempDirectory() = FileUtils.getDirectory(application, "temp")
 
     @Provides
@@ -42,10 +46,19 @@ class ApplicationTestModule(private val application: InstagramApplication) {
 
     @Provides
     @Singleton
+    fun provideSharedPreferences(): SharedPreferences =
+        application.getSharedPreferences("bootcamp-instagram-project-prefs", Context.MODE_PRIVATE)
+
+    /**
+     * We need to write @Singleton on the provide method if we are create the instance inside this method
+     * to make it singleton. Even if we have written @Singleton on the instance's class
+     */
+    @Provides
+    @Singleton
     fun provideDatabaseService(): DatabaseService =
         Room.databaseBuilder(
             application, DatabaseService::class.java,
-            "kodyuzz-prefs"
+            "bootcamp-instagram-project-db"
         ).build()
 
     @Provides
@@ -54,7 +67,6 @@ class ApplicationTestModule(private val application: InstagramApplication) {
         Networking.API_KEY = "FAKE_API_KEY"
         return FakeNetworkService()
     }
-
 
     @Singleton
     @Provides

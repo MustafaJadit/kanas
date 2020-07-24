@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kodyuzz.kanas.R
 import com.kodyuzz.kanas.di.component.FragmentComponent
 import com.kodyuzz.kanas.ui.base.BaseFragment
-import com.kodyuzz.kanas.ui.home.posts.PostAdapter
+import com.kodyuzz.kanas.ui.home.posts.PostsAdapter
 import com.kodyuzz.kanas.ui.main.MainSharedViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
@@ -34,7 +34,7 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
     lateinit var linearLayoutManager: LinearLayoutManager
 
     @Inject
-    lateinit var postsAdapter: PostAdapter
+    lateinit var postsAdapter: PostsAdapter
 
     override fun provideLayoutId(): Int = R.layout.fragment_home
 

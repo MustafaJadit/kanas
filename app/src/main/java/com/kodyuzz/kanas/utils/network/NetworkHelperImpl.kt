@@ -9,7 +9,8 @@ import com.kodyuzz.kanas.utils.log.Logger
 import java.io.IOException
 import java.net.ConnectException
 
-class NetworkHelperImp constructor(private val context: Context) : NetworkHelper {
+class NetworkHelperImpl constructor(private val context: Context) : NetworkHelper {
+
     companion object {
         private const val TAG = "NetworkHelper"
     }
@@ -21,10 +22,10 @@ class NetworkHelperImp constructor(private val context: Context) : NetworkHelper
     }
 
     override fun castToNetworkError(throwable: Throwable): NetworkError {
-        val defaultNetError = NetworkError()
+        val defaultNetworkError = NetworkError()
         try {
             if (throwable is ConnectException) return NetworkError(0, "0")
-            if (throwable !is HttpException) return defaultNetError
+            if (throwable !is HttpException) return defaultNetworkError
             val error = GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .create()
@@ -37,8 +38,6 @@ class NetworkHelperImp constructor(private val context: Context) : NetworkHelper
         } catch (e: NullPointerException) {
             Logger.e(TAG, e.toString())
         }
-
-        return defaultNetError
+        return defaultNetworkError
     }
-
 }

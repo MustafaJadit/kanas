@@ -11,7 +11,6 @@ import com.kodyuzz.kanas.utils.network.NetworkHelper
 import com.kodyuzz.kanas.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers.io
 
 class HomeViewModel(
     schedulerProvider: SchedulerProvider,

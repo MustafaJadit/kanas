@@ -7,13 +7,13 @@ import com.kodyuzz.kanas.data.model.Dummy
 data class DummyResponse(
     @Expose
     @SerializedName("statusCode")
-    var statusCode:String,
+    var statusCode: String,
 
     @Expose
     @SerializedName("message")
-    var message:String,
+    var message: String,
 
     @Expose
     @SerializedName("data")
-    val data:List<Dummy>
+    val data: List<Dummy>
 )

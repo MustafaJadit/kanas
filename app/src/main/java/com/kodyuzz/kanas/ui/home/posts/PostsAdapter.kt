@@ -5,12 +5,10 @@ import androidx.lifecycle.Lifecycle
 import com.kodyuzz.kanas.data.model.Post
 import com.kodyuzz.kanas.ui.base.BaseAdapter
 
-class PostAdapter(
+class PostsAdapter(
     parentLifecycle: Lifecycle,
     posts: ArrayList<Post>
-):BaseAdapter<Post,PostItemViewHolder> (parentLifecycle,posts) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostItemViewHolder {
-         return PostItemViewHolder(parent)
-    }
+) : BaseAdapter<Post, PostItemViewHolder>(parentLifecycle, posts) {
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PostItemViewHolder(parent)
 }

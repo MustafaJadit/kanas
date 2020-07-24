@@ -7,24 +7,24 @@ data class ImageResponse(
 
     @Expose
     @SerializedName("statusCode")
-    val statusCode:String,
+    val statusCode: String,
 
     @Expose
     @SerializedName("status")
-    val status:Int,
+    val status: Int,
 
     @Expose
     @SerializedName("message")
-    val message:String,
+    val message: String,
 
     @Expose
     @SerializedName("data")
-    val data:ImageData
-){
-
+    val data: ImageData
+) {
     data class ImageData(
+
         @Expose
         @SerializedName("imageUrl")
-        val imageUrl:String
+        val imageUrl: String
     )
 }

@@ -5,9 +5,9 @@ import com.bumptech.glide.load.model.LazyHeaders
 
 object GlideHelper {
 
-    fun getProtectedUrl(url:String, headers:Map<String,String>): GlideUrl {
+    fun getProtectedUrl(url: String, headers: Map<String, String>): GlideUrl {
         val builder = LazyHeaders.Builder()
-        for (entry in headers) builder.addHeader(entry.key,entry.value)
-        return GlideUrl(url,builder.build())
+        for (entry in headers) builder.addHeader(entry.key, entry.value)
+        return GlideUrl(url, builder.build())
     }
 }
